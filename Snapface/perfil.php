@@ -11,7 +11,6 @@ $erro = '';
 $ok   = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // atualizar dados básicos
   if (isset($_POST['atualizar'])) {
     $nome     = sanitize($_POST['nome'] ?? '');
     $username = sanitize($_POST['username'] ?? '');
@@ -23,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $erro = "E-mail inválido.";
     } else {
-      // checar conflitos com outros usuários
       if ($username !== $user['username'] && username_exists($username)) {
         $erro = "Este username já está em uso.";
       } elseif ($email !== $user['email'] && email_exists($email)) {
@@ -36,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 
-  // upload de foto
   if (isset($_POST['upload_foto']) && isset($_FILES['foto'])) {
     if ($_FILES['foto']['error'] === UPLOAD_ERR_OK) {
       $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -119,4 +116,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </main>
 </div>
 </body>
+
 </html>
