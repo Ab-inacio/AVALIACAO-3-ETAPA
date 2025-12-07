@@ -10,14 +10,14 @@ function sanitize($v) {
 
 function email_exists($email) {
   global $pdo;
-  $st = $pdo->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
+  $st = $pdo->prepare("SELECT id FROM usuarios WHERE email = ? LIMIT 1");
   $st->execute([$email]);
   return (bool)$st->fetch();
 }
 
 function username_exists($username) {
   global $pdo;
-  $st = $pdo->prepare("SELECT id FROM users WHERE username = ? LIMIT 1");
+  $st = $pdo->prepare("SELECT id FROM usuarios WHERE username = ? LIMIT 1");
   $st->execute([$username]);
   return (bool)$st->fetch();
 }
@@ -26,7 +26,7 @@ function create_user($nome, $username, $email, $senha, $data, $genero) {
   global $pdo;
   $hash = password_hash($senha, PASSWORD_DEFAULT);
   $st = $pdo->prepare("
-    INSERT INTO users (nome, username, email, senha_hash, data_nascimento, genero)
+    INSERT INTO usuarios (nome, username, email, senha_hash, data_nascimento, genero)
     VALUES (?,?,?,?,?,?)
   ");
   $st->execute([$nome, $username, $email, $hash, $data, $genero]);
@@ -34,27 +34,27 @@ function create_user($nome, $username, $email, $senha, $data, $genero) {
 
 function get_user_by_email($email) {
   global $pdo;
-  $st = $pdo->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+  $st = $pdo->prepare("SELECT * FROM usuarios WHERE email = ? LIMIT 1");
   $st->execute([$email]);
-  return $st->fetch();
+  return $st->fetch(PDO::FETCH_ASSOC);
 }
 
 function get_user($id) {
   global $pdo;
-  $st = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+  $st = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
   $st->execute([$id]);
-  return $st->fetch();
+  return $st->fetch(PDO::FETCH_ASSOC);
 }
 
 function update_user_basic($id, $nome, $username, $email) {
   global $pdo;
-  $st = $pdo->prepare("UPDATE users SET nome = ?, username = ?, email = ? WHERE id = ?");
+  $st = $pdo->prepare("UPDATE usuarios SET nome = ?, username = ?, email = ? WHERE id = ?");
   $st->execute([$nome, $username, $email, $id]);
 }
 
 function update_user_foto($id, $path) {
   global $pdo;
-  $st = $pdo->prepare("UPDATE users SET foto_perfil = ? WHERE id = ?");
+  $st = $pdo->prepare("UPDATE usuarios SET foto_perfil = ? WHERE id = ?");
   $st->execute([$path, $id]);
 }
 
@@ -62,27 +62,36 @@ function update_user_foto($id, $path) {
 
 function create_post($user_id, $conteudo) {
   global $pdo;
-  $st = $pdo->prepare("INSERT INTO posts (user_id, conteudo) VALUES (?, ?)");
+  // coluna de data (criado_em) tem DEFAULT CURRENT_TIMESTAMP no banco
+  $st = $pdo->prepare("INSERT INTO posts (usuario_id, conteudo) VALUES (?, ?)");
   $st->execute([$user_id, $conteudo]);
 }
 
 function get_feed_posts($user_id) {
   global $pdo;
   $sql = "
-    SELECT p.id, p.conteudo, p.created_at,
-           u.id AS user_id, u.nome, u.username, u.foto_perfil,
-           (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) AS likes
+    SELECT 
+      p.id,
+      p.conteudo,
+      p.criado_em AS created_at,
+      u.id          AS user_id,
+      u.nome,
+      u.username,
+      u.foto_perfil,
+      (SELECT COUNT(*) FROM curtidas c WHERE c.post_id = p.id) AS likes
     FROM posts p
-    JOIN users u ON u.id = p.user_id
-    WHERE p.user_id = :me
-       OR p.user_id IN (
-            SELECT seguido_id FROM follows WHERE seguidor_id = :me2
+    JOIN usuarios u ON u.id = p.usuario_id
+    WHERE p.usuario_id = :me
+       OR p.usuario_id IN (
+            SELECT seguido_id 
+            FROM seguidores 
+            WHERE seguidor_id = :me2
           )
-    ORDER BY p.created_at DESC
+    ORDER BY p.criado_em DESC
   ";
   $st = $pdo->prepare($sql);
   $st->execute([':me' => $user_id, ':me2' => $user_id]);
-  return $st->fetchAll();
+  return $st->fetchAll(PDO::FETCH_ASSOC);
 }
 
 /* ===== LIKES (CURTIR / DESCURTIR) ===== */
@@ -90,16 +99,20 @@ function get_feed_posts($user_id) {
 function toggle_like($user_id, $post_id) {
   global $pdo;
   $pdo->beginTransaction();
-  $st = $pdo->prepare("SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?");
+
+  $st = $pdo->prepare("SELECT 1 FROM curtidas WHERE usuario_id = ? AND post_id = ?");
   $st->execute([$user_id, $post_id]);
 
   if ($st->fetch()) {
-    $del = $pdo->prepare("DELETE FROM likes WHERE user_id = ? AND post_id = ?");
+    // já curtiu -> remover curtida
+    $del = $pdo->prepare("DELETE FROM curtidas WHERE usuario_id = ? AND post_id = ?");
     $del->execute([$user_id, $post_id]);
   } else {
-    $ins = $pdo->prepare("INSERT INTO likes (user_id, post_id) VALUES (?, ?)");
+    // não curtiu ainda -> inserir curtida
+    $ins = $pdo->prepare("INSERT INTO curtidas (usuario_id, post_id) VALUES (?, ?)");
     $ins->execute([$user_id, $post_id]);
   }
+
   $pdo->commit();
 }
 
@@ -107,7 +120,7 @@ function toggle_like($user_id, $post_id) {
 
 function is_following($seguidor, $seguido) {
   global $pdo;
-  $st = $pdo->prepare("SELECT 1 FROM follows WHERE seguidor_id = ? AND seguido_id = ?");
+  $st = $pdo->prepare("SELECT 1 FROM seguidores WHERE seguidor_id = ? AND seguido_id = ?");
   $st->execute([$seguidor, $seguido]);
   return (bool)$st->fetch();
 }
@@ -115,12 +128,15 @@ function is_following($seguidor, $seguido) {
 function toggle_follow($seguidor, $seguido) {
   global $pdo;
   if ($seguidor === $seguido) return null;
+
   if (is_following($seguidor, $seguido)) {
-    $st = $pdo->prepare("DELETE FROM follows WHERE seguidor_id = ? AND seguido_id = ?");
+    // já segue -> deixar de seguir
+    $st = $pdo->prepare("DELETE FROM seguidores WHERE seguidor_id = ? AND seguido_id = ?");
     $st->execute([$seguidor, $seguido]);
     return false;
   } else {
-    $st = $pdo->prepare("INSERT INTO follows (seguidor_id, seguido_id) VALUES (?, ?)");
+    // não segue -> seguir
+    $st = $pdo->prepare("INSERT INTO seguidores (seguidor_id, seguido_id) VALUES (?, ?)");
     $st->execute([$seguidor, $seguido]);
     return true;
   }
@@ -130,13 +146,17 @@ function search_users($me, $q) {
   global $pdo;
   $sql = "
     SELECT id, nome, username, foto_perfil
-    FROM users
+    FROM usuarios
     WHERE (nome LIKE :q OR username LIKE :q2)
       AND id <> :me
     ORDER BY nome
   ";
   $st = $pdo->prepare($sql);
   $like = "%".$q."%";
-  $st->execute([':q' => $like, ':q2' => $like, ':me' => $me]);
-  return $st->fetchAll();
+  $st->execute([
+    ':q'  => $like,
+    ':q2' => $like,
+    ':me' => $me
+  ]);
+  return $st->fetchAll(PDO::FETCH_ASSOC);
 }
