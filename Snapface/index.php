@@ -2,7 +2,6 @@
 require_once 'functions.php';
 require_once 'auth.php';
 
-// se já está logado, vai direto pro feed
 if (!empty($_SESSION['user_id'])) {
   header('Location: feed.php');
   exit;
@@ -63,4 +62,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </main>
 </body>
+
 </html>
