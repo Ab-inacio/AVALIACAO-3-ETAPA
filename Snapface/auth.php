@@ -1,12 +1,10 @@
 <?php
-// CONFIGURAÇÕES DE SESSÃO SEGURA
+
 ini_set('session.use_strict_mode', 1);
 ini_set('session.cookie_httponly', 1);
-// ini_set('session.cookie_secure', 1); // só em HTTPS real
 ini_set('session.use_only_cookies', 1);
 ini_set('session.gc_maxlifetime', 3600);
 
-// Define um caminho de sessões dentro do próprio projeto, para não depender do antigo D:/...
 $sessionPath = __DIR__ . '/sessions';
 
 if (!is_dir($sessionPath)) {
@@ -17,7 +15,6 @@ session_save_path($sessionPath);
 
 session_start();
 
-// timeout 15 min
 if (isset($_SESSION['ultimo_acesso']) && (time() - $_SESSION['ultimo_acesso'] > 900)) {
   session_unset();
   session_destroy();
@@ -31,4 +28,5 @@ function ensure_logged_in() {
     header('Location: index.php');
     exit;
   }
+
 }
