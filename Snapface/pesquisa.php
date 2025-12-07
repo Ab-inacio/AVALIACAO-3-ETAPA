@@ -11,7 +11,6 @@ $q    = trim($_GET['q'] ?? '');
 $erro = '';
 $ok   = '';
 
-// seguir / deixar de seguir
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_follow'])) {
   $alvo = (int)$_POST['toggle_follow'];
   $res  = toggle_follow($me, $alvo);
@@ -90,4 +89,5 @@ if ($q !== '') {
   </main>
 </div>
 </body>
+
 </html>
