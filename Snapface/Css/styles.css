@@ -1,6 +1,3 @@
-/* ======================================
-   RESET + BASE
-====================================== */
 * {
   box-sizing: border-box;
 }
@@ -12,19 +9,12 @@ body {
   color: #111;
 }
 
-/* ======================================
-   LAYOUT PRINCIPAL
-====================================== */
-
 .container {
   min-height: 100vh;
   display: flex;
   background: #f2f3f5;
 }
 
-/* ======================================
-   SIDEBAR
-====================================== */
 
 .sidebar {
   width: 72px;
@@ -63,10 +53,6 @@ body {
   transform: scale(1.05);
 }
 
-/* ======================================
-   ÁREA PRINCIPAL
-====================================== */
-
 .main-content {
   flex: 1;
   padding: 24px 14px 40px;
@@ -80,9 +66,6 @@ body {
   max-width: 880px;
 }
 
-/* ======================================
-   TOPO DO PERFIL (FEED)
-====================================== */
 
 .profile-header {
   background: #ffffff;
@@ -129,9 +112,6 @@ body {
   filter: brightness(1.1);
 }
 
-/* ======================================
-   CAMPO DE POSTAGEM
-====================================== */
 
 .post-form {
   background: #ffffff;
@@ -170,10 +150,6 @@ body {
   transform: translateY(-2px);
   filter: brightness(1.1);
 }
-
-/* ======================================
-   POSTS
-====================================== */
 
 .post {
   background: #ffffff;
@@ -232,9 +208,6 @@ body {
   background: rgba(224,36,94,0.1);
 }
 
-/* ======================================
-   PERFIL (FOTO GRANDE)
-====================================== */
 
 .profile-hero {
   background: #ffffff;
@@ -259,9 +232,6 @@ body {
   font-weight: 800;
 }
 
-/* ======================================
-   CARDS DO PERFIL
-====================================== */
 
 .profile-sections-wrapper {
   display: grid;
@@ -308,9 +278,6 @@ body {
   filter: brightness(1.1);
 }
 
-/* ======================================
-   LOGIN E CADASTRO
-====================================== */
 
 .cadastro-container,
 .login-container {
@@ -362,9 +329,6 @@ body {
   cursor: pointer;
 }
 
-/* ======================================
-   BOTÕES SEGUIR / DEIXAR DE SEGUIR
-====================================== */
 
 .btn-primary,
 button[name="toggle_follow"] {
@@ -384,7 +348,6 @@ button[name="toggle_follow"]:hover {
   filter: brightness(1.1);
 }
 
-/* 1) FOTO GRANDE DO PERFIL CENTRALIZADA */
 .profile-hero {
   display: flex;
   flex-direction: column;
@@ -394,10 +357,9 @@ button[name="toggle_follow"]:hover {
 }
 
 .profile-hero img {
-  margin: 0 auto 18px auto;  /* garante ficar bem no meio */
+  margin: 0 auto 18px auto; 
 }
 
-/* 2) BOTÃO SAIR / EDITAR PERFIL ALINHADO NA DIREITA DO CABEÇALHO */
 .profile-header {
   display: flex;
   align-items: center;
@@ -412,14 +374,12 @@ button[name="toggle_follow"]:hover {
   margin-left: auto;
 }
 
-/* 3) CARD DE USUÁRIOS NA PESQUISA COM BOTÃO À DIREITA */
 .user-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* parte esquerda (foto + nome + @usuario) em linha */
 .user-card .left,
 .user-card .info {
   display: flex;
@@ -427,7 +387,6 @@ button[name="toggle_follow"]:hover {
   gap: 10px;
 }
 
-/* botão Seguir / Deixar de seguir encostado à direita */
 button[name="toggle_follow"],
 .btn-primary[name="toggle_follow"] {
   margin-left: auto;
@@ -448,7 +407,6 @@ button[name="toggle_follow"]:hover,
 }
 
 
-/* força qualquer card de usuário virar flex */
 .user-card,
 .usuario-card,
 .card-usuario,
@@ -460,7 +418,6 @@ button[name="toggle_follow"]:hover,
   justify-content: space-between !important;
 }
 
-/* força o botão ir totalmente para a direita */
 button[name="toggle_follow"],
 .btn-primary[name="toggle_follow"] {
   margin-left: auto !important;
@@ -484,12 +441,6 @@ button[name="toggle_follow"]:hover,
   transform: translateY(-1px);
 }
 
-/* =====================================
-   AJUSTE DEFINITIVO DA LISTA DE USUÁRIOS
-   (botão Seguir/Deixar de seguir à direita)
-===================================== */
-
-/* garante que o card de usuário seja um flex-row */
 .user-card {
   display: flex;
   align-items: center;
@@ -497,7 +448,6 @@ button[name="toggle_follow"]:hover,
   gap: 12px;
 }
 
-/* bloco da esquerda: foto + nome + @ */
 .user-card .left,
 .user-card .info {
   display: flex;
@@ -505,12 +455,10 @@ button[name="toggle_follow"]:hover,
   gap: 10px;
 }
 
-/* empurra o FORM (que contém o botão) para a direita */
 .user-card form {
   margin-left: auto;
 }
 
-/* estilo visual do botão seguir/deixar de seguir */
 .follow-btn,
 .unfollow-btn,
 button[name="toggle_follow"] {
@@ -522,7 +470,6 @@ button[name="toggle_follow"] {
   transition: background 0.15s ease, transform 0.08s ease;
 }
 
-/* Seguir = azul */
 .follow-btn,
 button[name="toggle_follow"]:not(.unfollow-btn) {
   background: #1d9bf0;
@@ -535,7 +482,6 @@ button[name="toggle_follow"]:not(.unfollow-btn):hover {
   transform: translateY(-1px);
 }
 
-/* Deixar de seguir = vermelho */
 .unfollow-btn {
   background: #ef4444;
   color: #ffffff;
@@ -545,10 +491,6 @@ button[name="toggle_follow"]:not(.unfollow-btn):hover {
   background: #dc2626;
   transform: translateY(-1px);
 }
-
-/* ===============================
-   FOTO GRANDE DO PERFIL CENTRALIZADA
-================================= */
 
 .profile-hero {
   display: flex;
@@ -563,9 +505,6 @@ button[name="toggle_follow"]:not(.unfollow-btn):hover {
   margin: 0 auto 16px auto;
 }
 
-/* ======================================
-   RESPONSIVO
-====================================== */
 
 @media (max-width: 900px) {
   .profile-sections-wrapper {
@@ -579,4 +518,5 @@ button[name="toggle_follow"]:not(.unfollow-btn):hover {
   .main-content {
     padding: 16px 10px 30px;
   }
+
 }
