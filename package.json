@@ -1,6 +1,6 @@
 {
-  "name": "trabalho-pratico-i",
-  "version": "1.0.0",
+  "name": "	cashly",
+  "version": "2.0.0",
   "main": "index.ts",
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
