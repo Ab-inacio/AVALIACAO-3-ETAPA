@@ -1,5 +1,5 @@
 {
-  "name": "	cashly",
+  "name": "cashly",
   "version": "2.0.0",
   "main": "index.ts",
   "dependencies": {
