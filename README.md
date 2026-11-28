@@ -126,6 +126,14 @@ para realizar a autenticação.
 
 ## Desenvolvimento
 
+## Vídeo de demonstração
+
+O vídeo apresenta as principais funcionalidades do Cashly 2.0.
+
+[Baixar vídeo de demonstração](./demonstracao/Demonstracao-Cashly.mp4?raw=true)
+
+Devido ao tamanho do arquivo, pode ser necessário realizar
+o download para assistir ao vídeo.
 Projeto acadêmico desenvolvido para a disciplina de
 Desenvolvimento para Dispositivos Móveis.
 
