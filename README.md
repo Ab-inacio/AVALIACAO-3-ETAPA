@@ -1,4 +1,3 @@
-
 # Cashly 2.0
 
 **Seu dinheiro, seu controle.**
@@ -85,6 +84,7 @@ os dados armazenados no AsyncStorage.
 - `services/`: funções de armazenamento e recuperação dos dados.
 - `types/`: definição dos tipos utilizados no projeto.
 - `assets/`: recursos visuais.
+- `demonstracao/`: vídeo de demonstração do aplicativo.
 - `App.tsx`: gerenciamento dos estados e integração das telas.
 
 ## Bibliotecas adicionais
@@ -124,19 +124,30 @@ Escaneie o QR Code apresentado no terminal utilizando o Expo Go.
 O dispositivo deve possuir um método de segurança configurado
 para realizar a autenticação.
 
-## Desenvolvimento
-
 ## Vídeo de demonstração
 
-O vídeo apresenta as principais funcionalidades do Cashly 2.0.
+O vídeo apresenta as principais funcionalidades do Cashly 2.0,
+incluindo:
 
-[Baixar vídeo de demonstração](./demonstracao/Demonstracao-Cashly.mp4?raw=true)
+- Autenticação nativa.
+- Navegação entre as telas.
+- Cadastro, consulta, edição e exclusão de despesas.
+- Validação dos campos.
+- Busca e filtros por categoria.
+- Atualização dos indicadores financeiros.
+- Persistência dos dados após o encerramento do aplicativo.
 
-Devido ao tamanho do arquivo, pode ser necessário realizar
-o download para assistir ao vídeo.
+**[Baixar vídeo de demonstração](./demonstracao/Demonstracao-Cashly.mp4?raw=true)**
+
+Devido ao tamanho do arquivo, o GitHub não disponibiliza a
+pré-visualização do vídeo. Para assistir, basta realizar o
+download pelo link acima.
+
+## Desenvolvimento
+
 Projeto acadêmico desenvolvido para a disciplina de
 Desenvolvimento para Dispositivos Móveis.
 
-Curso: Sistemas de Informação.
+**Curso:** Sistemas de Informação.
 
-Versão: 2.0.0
+**Versão:** 2.0.0
